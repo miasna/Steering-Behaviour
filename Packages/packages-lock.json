@@ -146,6 +146,13 @@
       },
       "url": "https://packages.unity.com"
     },
+    "nl.glu.steering-behaviour": {
+      "version": "https://gitlab.glu.nl/packages/steering-behaviours.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "8d00707bf57ffd5f510d54b5846c8cba6dbba8ba"
+    },
     "com.unity.modules.ai": {
       "version": "1.0.0",
       "depth": 0,
