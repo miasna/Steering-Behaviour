@@ -75,12 +75,12 @@ GameObject:
   - component: {fileID: 5636941485648391599}
   - component: {fileID: 5636941485638882595}
   - component: {fileID: 772925513223743800}
-  - component: {fileID: 2058097059948403540}
-  - component: {fileID: 1039481476}
+  - component: {fileID: 7176065682080949491}
+  - component: {fileID: 1615814693530588072}
   - component: {fileID: 6490435873702159769}
-  m_Layer: 0
-  m_Name: Unit
-  m_TagString: Untagged
+  m_Layer: 3
+  m_Name: Friendly Unit
+  m_TagString: FriendlyUnit
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -136,7 +136,7 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 1, z: 0}
---- !u!114 &2058097059948403540
+--- !u!114 &7176065682080949491
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -149,8 +149,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   path: {fileID: 0}
-  test: {fileID: 0}
---- !u!114 &1039481476
+  eyesTransform: {fileID: 5636941485648426707}
+  unitState: 0
+--- !u!114 &1615814693530588072
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -159,11 +160,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 5636941485648121973}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e45076ffd8c17c24ca2f9052e15476f9, type: 3}
+  m_Script: {fileID: 11500000, guid: 1602d973962fe8342901af8d60c002b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_label: 
-  m_settings: {fileID: 11400000, guid: 221e30d8e0c225c43a5e5f7c86d42fa9, type: 2}
+  m_settings: {fileID: 11400000, guid: d68ee2a267b56b14d9cfdb8837826cac, type: 2}
   m_position: {x: 0, y: 0, z: 0}
   m_velocity: {x: 0, y: 0, z: 0}
   m_steering: {x: 0, y: 0, z: 0}
@@ -185,6 +186,7 @@ MonoBehaviour:
   SightRange: 20
   Defense: 20
   Behavior: 0
+  maxDefense: 0
 --- !u!1 &5636941485648123083
 GameObject:
   m_ObjectHideFlags: 0

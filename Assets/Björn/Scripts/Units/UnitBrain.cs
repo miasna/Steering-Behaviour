@@ -5,58 +5,143 @@ using GLU.SteeringBehaviours;
 [RequireComponent(typeof(Steering), typeof(UnitStats))]
 public abstract class UnitBrain : MonoBehaviour
 {
-    [Tooltip("The path for the unit to follow.")]
+    [Tooltip("Path containing a list of Waypoints.")]
     [SerializeField] protected Path path;
 
-    [SerializeField] protected LayerMask targetLayer;
+    [Tooltip("Transform of this units eyes.")]
+    [SerializeField] protected Transform eyesTransform;
+    
+    protected Steering steering;                        // The Steering component used by this unit.
+    protected UnitStats unitStats;                      // The UnitStats used by this unit.
+    [SerializeField] protected UnitStates unitState;    // The UnitState this unit is in.
 
-    protected Steering steering;
-    protected List<IBehavior> travelBehavior;
-    protected UnitStats unitStats;
-
-    protected UnitStates unitState;
+    protected List<IBehavior> travelBehavior;           // Behaviors used for travelling around the level.
+    protected List<IBehavior> chaseBehavior;            // Behaviors used for chasing (hostile) units.
+    protected List<IBehavior> attackBehavior;           // Behaviors used for attacking hostile units.
+    protected List<IBehavior> fleeBehavior;             // Behaviors used for fleeing from (hostile) units.
+    protected List<IBehavior> dieBehavior;              // Behaviors used for when this unit dies.
 
     protected virtual void Awake()
     {
         steering = GetComponent<Steering>();
-        InitializeTravelBehavior();
         unitStats = GetComponent<UnitStats>();
     }
 
     protected virtual void Start()
     {
+        TransitionToTravelBehavior(path);
+    }
+
+    protected virtual void TransitionToTravelBehavior(Path path)
+    {
+        travelBehavior = new List<IBehavior>()
+        {
+            new AvoidObstacle(),
+            new AvoidWall(),
+            new Flock(gameObject),
+            new FollowPath(path.Waypoints)
+        };
+
         steering.SetBehaviors(travelBehavior);
+        unitState = UnitStates.Travel;
     }
 
-    protected void Update()
+    protected virtual void TransitionToChaseBehavior(GameObject target)
     {
+        chaseBehavior = new List<IBehavior>()
+        {
+            new AvoidObstacle(),
+            new AvoidWall(),
+            new Seek(target)
+        };
 
+        steering.SetBehaviors(chaseBehavior);
+        unitState = UnitStates.Chase;
     }
 
-    //protected virtual GameObject GetClosestTarget()
-    //{
-    //    Collider[] targetColliders = Physics.OverlapSphere(transform.position, unitStats.SightRange, targetLayer);
-
-    //    if (targetColliders == null)
-    //    {
-    //        return null;
-    //    }
-
-    //    float shortestDistanceToTarget = Mathf.Infinity;
-
-    //    foreach (Collider targetCollider in targetColliders)
-    //    {
-    //        Vector3 directionToTarget = (targetCollider.transform.position - transform.position).normalized;
-    //        Ray ray = new Ray(transform.position, directionToTarget)
-    //    }
-    //}
-
-    protected virtual void InitializeTravelBehavior()
+    protected virtual void TransitionToAttackBehavior()
     {
-        travelBehavior = new List<IBehavior>();
-        travelBehavior.Add(new AvoidObstacle());
-        travelBehavior.Add(new AvoidWall());
-        travelBehavior.Add(new Flock(gameObject));
-        travelBehavior.Add(new FollowPath(path.Waypoints));
+        attackBehavior = new List<IBehavior>()
+        {
+            new Idle()
+        };
+
+        steering.SetBehaviors(attackBehavior);
+        unitState = UnitStates.Attack;
+    }
+
+    protected virtual void TransitionToFleeBehavior(GameObject target)
+    {
+        fleeBehavior = new List<IBehavior>()
+        {
+            new AvoidObstacle(),
+            new AvoidWall(),
+            new Flee(target)
+        };
+
+        steering.SetBehaviors(fleeBehavior);
+        unitState = UnitStates.Flee;
+    }
+
+    protected virtual void TransitionToDieBehavior()
+    {
+        dieBehavior = new List<IBehavior>()
+        {
+            new Idle()
+        };
+
+        steering.SetBehaviors(dieBehavior);
+        unitState = UnitStates.Die;
+    }
+
+    protected GameObject GetClosestGameObjectInSight(string gameObjectTag)
+    {
+        Collider[] colliders = Physics.OverlapSphere(eyesTransform.position, unitStats.SightRange);
+
+        if (colliders.Length == 0)
+        {
+            return null;
+        }
+
+        float furthestDistanceToCollider = Mathf.Infinity;
+        GameObject closestGameObject = null;
+
+        foreach (Collider collider in colliders)
+        {
+            if (!collider.CompareTag(gameObjectTag))
+            {
+                continue;
+            }
+
+            if (IsGameObjectInSight(collider.gameObject))
+            {
+                float currentDistanceToCollider = Vector3.Distance(eyesTransform.position, collider.transform.position);
+
+                if (currentDistanceToCollider < furthestDistanceToCollider)
+                {
+                    furthestDistanceToCollider = currentDistanceToCollider;
+                    closestGameObject = collider.gameObject;
+                }  
+            }
+        }
+
+        return closestGameObject;
+    }
+
+    protected bool IsGameObjectInSight(GameObject gameObject)
+    {
+        Vector3 direction = (gameObject.transform.position - eyesTransform.position).normalized;
+        Ray ray = new Ray(eyesTransform.position, direction);
+        RaycastHit hit = new RaycastHit();
+
+        if (Physics.Raycast(ray, out hit))
+        {
+            if (hit.transform.gameObject == gameObject)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

@@ -2,9 +2,16 @@ using UnityEngine;
 
 public class PathVisualizer : MonoBehaviour
 {
+    [Tooltip("The color of the Gizmos.")]
     [SerializeField] private Color color = Color.white;
-    [SerializeField] private bool wireframeMode = false;
+
+    [Tooltip("The radius of the Gizmos.")]
     [SerializeField] private float radius = 0.2f;
+
+    [Tooltip("Should the first and last Gizmos be connected?")]
+    [SerializeField] private bool loop = false;
+
+    [Tooltip("Should the Gizmos always be visualized?")]
     [SerializeField] private bool alwaysVisualize = false;
 
     private void OnDrawGizmos()
@@ -32,15 +39,21 @@ public class PathVisualizer : MonoBehaviour
         Gizmos.color = color;
         Transform[] transforms = GetComponentsInChildren<Transform>();
 
-        foreach (Transform transform in transforms)
+        for (int i = 0; i < transforms.Length; i++)
         {
-            if (wireframeMode)
+            Gizmos.DrawSphere(transforms[i].position, radius);
+
+            if (i < transforms.Length - 1)
             {
-                Gizmos.DrawWireSphere(transform.position, radius);
+                Gizmos.DrawLine(transforms[i].position, transforms[i + 1].position);
             }
-            else
+
+            if (loop)
             {
-                Gizmos.DrawSphere(transform.position, radius);
+                if (i == transforms.Length - 1)
+                {
+                    Gizmos.DrawLine(transforms[i].position, transforms[0].position);
+                }
             }
         }
     }

@@ -51,7 +51,7 @@ namespace GLU.SteeringBehaviours
             foreach (Collider neighbor in neighbors)
             {
                 // skip this agent
-                if (neighbor == m_myCollider)
+                if (neighbor == m_myCollider || neighbor.gameObject.CompareTag(Extension.HostileUnitTag))
                     continue;
 
                 // get steering component from neighbor (if any)

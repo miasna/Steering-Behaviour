@@ -9,8 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f69e24b4e23a6548b7607bbd0b97837, type: 3}
-  m_Name: Aggresive Unit
+  m_Script: {fileID: 11500000, guid: d66cbec5231e25e42a0cd292a548602a, type: 3}
+  m_Name: Aggressive Unit Settings
   m_EditorClassIdentifier: 
   m_mass: 20
   m_maxDesiredVelocity: 3
@@ -18,7 +18,7 @@ MonoBehaviour:
   m_maxSpeed: 3
   m_minSpeed: 0.05
   m_followPathMode: 0
-  m_followPathLooping: 0
+  m_followPathLooping: 1
   m_followPathRadius: 2.5
   m_stopDistance: 10
   m_lookAheadTime: 1
@@ -42,8 +42,8 @@ MonoBehaviour:
   m_flockAlignmentRadius: 6
   m_flockCohesionRadius: 6
   m_flockSeparationRadius: 3
-  m_arriveDistance: 1.5
-  m_slowingDistance: 1.5
+  m_arriveDistance: 2
+  m_slowingDistance: 4
   m_obstacleLayer: Obstacles
   m_wallLayer: Walls
   m_avoidDistance: 3

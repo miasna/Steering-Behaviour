@@ -1,7 +1,7 @@
 public enum UnitStates
 {
     Travel,
-    Pursue,
+    Chase,
     Attack,
     Flee,
     Die

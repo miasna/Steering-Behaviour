@@ -1,9 +1,11 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Path : MonoBehaviour
 {
+    /// <summary>
+    /// Get all children of this GameObject that have a Waypoint component.
+    /// </summary>
     public List<GameObject> Waypoints
     {
         get
