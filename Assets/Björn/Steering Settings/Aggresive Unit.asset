@@ -42,8 +42,8 @@ MonoBehaviour:
   m_flockAlignmentRadius: 6
   m_flockCohesionRadius: 6
   m_flockSeparationRadius: 3
-  m_arriveDistance: 2
-  m_slowingDistance: 4
+  m_arriveDistance: 1.5
+  m_slowingDistance: 1.5
   m_obstacleLayer: Obstacles
   m_wallLayer: Walls
   m_avoidDistance: 3

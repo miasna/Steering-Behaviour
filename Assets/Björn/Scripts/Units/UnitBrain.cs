@@ -8,11 +8,13 @@ public abstract class UnitBrain : MonoBehaviour
     [Tooltip("The path for the unit to follow.")]
     [SerializeField] protected Path path;
 
+    [SerializeField] protected LayerMask targetLayer;
+
     protected Steering steering;
     protected List<IBehavior> travelBehavior;
     protected UnitStats unitStats;
 
-    protected UnitStates unitStates;
+    protected UnitStates unitState;
 
     protected virtual void Awake()
     {
@@ -30,6 +32,24 @@ public abstract class UnitBrain : MonoBehaviour
     {
 
     }
+
+    //protected virtual GameObject GetClosestTarget()
+    //{
+    //    Collider[] targetColliders = Physics.OverlapSphere(transform.position, unitStats.SightRange, targetLayer);
+
+    //    if (targetColliders == null)
+    //    {
+    //        return null;
+    //    }
+
+    //    float shortestDistanceToTarget = Mathf.Infinity;
+
+    //    foreach (Collider targetCollider in targetColliders)
+    //    {
+    //        Vector3 directionToTarget = (targetCollider.transform.position - transform.position).normalized;
+    //        Ray ray = new Ray(transform.position, directionToTarget)
+    //    }
+    //}
 
     protected virtual void InitializeTravelBehavior()
     {

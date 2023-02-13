@@ -5,6 +5,8 @@ using GLU.SteeringBehaviours;
 
 public class WandererBrain : UnitBrain
 {
+    [SerializeField] private GameObject go;
+
     protected override void Awake()
     {
         base.Awake();
@@ -17,6 +19,7 @@ public class WandererBrain : UnitBrain
 
     protected override void InitializeTravelBehavior()
     {
-
+        travelBehavior = new List<IBehavior>();
+        travelBehavior.Add(new Pursue(go));
     }
 }
