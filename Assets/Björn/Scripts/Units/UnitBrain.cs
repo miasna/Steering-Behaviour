@@ -21,6 +21,8 @@ public abstract class UnitBrain : MonoBehaviour
     protected List<IBehavior> fleeBehavior;             // Behaviors used for fleeing from (hostile) units.
     protected List<IBehavior> dieBehavior;              // Behaviors used for when this unit dies.
 
+    protected GameObject target;                        // The target this unit interacts with.
+
     protected virtual void Awake()
     {
         steering = GetComponent<Steering>();
@@ -94,6 +96,32 @@ public abstract class UnitBrain : MonoBehaviour
         unitState = UnitStates.Die;
     }
 
+    protected GameObject[] GetGameObjectsInSight(string gameObjectTag)
+    {
+        Collider[] colliders = Physics.OverlapSphere(eyesTransform.position, unitStats.SightRange);
+        List<GameObject> GameObjectsInSight = new List<GameObject>();
+
+        if (colliders.Length == 0)
+        {
+            return null;
+        }
+
+        foreach (Collider collider in colliders)
+        {
+            if (!collider.CompareTag(gameObjectTag))
+            {
+                continue;
+            }
+
+            if (IsGameObjectInSight(collider.gameObject))
+            {
+                GameObjectsInSight.Add(collider.gameObject);
+            }
+        }
+
+        return GameObjectsInSight.ToArray();
+    }
+
     protected GameObject GetClosestGameObjectInSight(string gameObjectTag)
     {
         Collider[] colliders = Physics.OverlapSphere(eyesTransform.position, unitStats.SightRange);
@@ -104,7 +132,7 @@ public abstract class UnitBrain : MonoBehaviour
         }
 
         float furthestDistanceToCollider = Mathf.Infinity;
-        GameObject closestGameObject = null;
+        GameObject closestGameObjectInSight = null;
 
         foreach (Collider collider in colliders)
         {
@@ -120,12 +148,12 @@ public abstract class UnitBrain : MonoBehaviour
                 if (currentDistanceToCollider < furthestDistanceToCollider)
                 {
                     furthestDistanceToCollider = currentDistanceToCollider;
-                    closestGameObject = collider.gameObject;
+                    closestGameObjectInSight = collider.gameObject;
                 }  
             }
         }
 
-        return closestGameObject;
+        return closestGameObjectInSight;
     }
 
     protected bool IsGameObjectInSight(GameObject gameObject)

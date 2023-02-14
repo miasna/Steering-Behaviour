@@ -3,8 +3,6 @@ using GLU.SteeringBehaviours;
 
 public class AggressiveUnit : UnitBrain
 {
-    private GameObject target;  // The target GameObject this unit interacts with.          
-
     protected override void Awake()
     {
         base.Awake();
